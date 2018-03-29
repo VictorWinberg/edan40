@@ -1,0 +1,38 @@
+name:                ex1
+version:             1.0.0
+github:              "VictorWinberg/ex1"
+license:             BSD3
+author:              "Victor Winberg"
+maintainer:          "dat14vwi@student.lu.se"
+copyright:           "2018 VictorWinberg"
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  ex1-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - ex1
+
+tests:
+  ex1-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - ex1
+    - tasty
+    - tasty-hunit
+    - tasty-quickcheck
