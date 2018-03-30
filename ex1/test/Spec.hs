@@ -44,9 +44,37 @@ maphanoiTests = testGroup "maphanoi tests"
   , testCase "negative" $ maphanoi (-1) @?= -1
   ]
 
+smallestFactorTests = testGroup "smallestFactor tests"
+  [ testCase "1" $ smallestFactor 1 @?= 1
+  , testCase "14" $ smallestFactor 14 @?= 2
+  , testCase "15" $ smallestFactor 15 @?= 3
+  , testCase "negative" $ smallestFactor (-1) @?= -1
+  ]
+
+recnumFactorsTests = testGroup "recnumFactors tests"
+  [ testCase "1" $ recnumFactors 1 @?= 0
+  , testCase "2" $ recnumFactors 2 @?= 1
+  , testCase "3" $ recnumFactors 3 @?= 1
+  , testCase "4" $ recnumFactors 4 @?= 2
+  , testCase "14" $ recnumFactors 14 @?= 2
+  , testCase "15" $ recnumFactors 15 @?= 2
+  , testCase "negative" $ recnumFactors (-1) @?= -1
+  ]
+
+mapnumFactorsTests = testGroup "mapnumFactors tests"
+  [ testCase "1" $ mapnumFactors 1 @?= 0
+  , testCase "2" $ mapnumFactors 2 @?= 1
+  , testCase "3" $ mapnumFactors 3 @?= 1
+  , testCase "4" $ mapnumFactors 4 @?= 2
+  , testCase "14" $ mapnumFactors 14 @?= 2
+  , testCase "15" $ mapnumFactors 15 @?= 2
+  , testCase "negative" $ mapnumFactors (-1) @?= -1
+  ]
+
 propertyTests = testGroup "property tests"
   [ testProperty "recsumsq same as mapsumsq" sumsqRecSameAsMap
   , testProperty "rechanoi same as maphanoi" hanoiRecSameAsMap
+  , testProperty "recnumFactors same as mapnumFactors" numFactorsRecSameAsMap
   ]
 
 sumsqRecSameAsMap :: Integer -> Bool
@@ -55,12 +83,18 @@ sumsqRecSameAsMap x = recsumsq x == mapsumsq x
 hanoiRecSameAsMap :: Integer -> Bool
 hanoiRecSameAsMap x = rechanoi x == maphanoi x
 
+numFactorsRecSameAsMap :: Integer -> Bool
+numFactorsRecSameAsMap x = recnumFactors x == mapnumFactors x
+
 allTests = testGroup "all tests"
   [ maxiTests
   , recsumsqTests
   , mapsumsqTests
   , rechanoiTests
   , maphanoiTests
+  , smallestFactorTests
+  , recnumFactorsTests
+  , mapnumFactorsTests
   , propertyTests
   ]
 
