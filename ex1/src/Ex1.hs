@@ -7,7 +7,14 @@ module Ex1
     , smallestFactor
     , recnumFactors
     , mapnumFactors
+    , Month(..)
+    , Date(..)
+    , daysInMonth
+    , validDate
     ) where
+
+import Data.Maybe
+import Data.List
 
 maxi :: Integer -> Integer -> Integer
 maxi x y
@@ -64,12 +71,27 @@ recnumFactors n
 -- mapping
 mapnumFactors :: Integer -> Integer
 mapnumFactors n
-  | n > 1 = maxi 1 $ flip (-) 1 $ toInteger $ length $ removeDups $ map (flip nextFactor n) [2..n]
+  | n > 1 = maxi 1 $ flip (-) 1 $ toInteger $ length $ rmdups $ map (flip nextFactor n) [2..n]
   | n > 0 = 0
   | otherwise = -1
 
-removeDups :: [Integer] -> [Integer]
-removeDups [] = []
-removeDups (x:xs)
-  | elem x xs = removeDups xs
-  | otherwise = x : removeDups xs
+rmdups :: [Integer] -> [Integer]
+rmdups = map head . group . sort
+
+data Month = Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Nov | Dec
+  deriving (Eq, Ord, Enum, Show, Read)
+
+daysInMonth :: Month -> Integer -> Integer
+daysInMonth m y
+  | i == 1 || i == 3 || i == 5 || i == 7 || i == 8 || i == 10 || i == 12 = 31
+  | i == 4 || i == 6 || i == 9 || i == 11 = 30
+  | mod y 4 == 0  = 29
+  | otherwise     = 28
+    where i = (+) 1 $ fromJust $ elemIndex m [Jan ..]
+
+data Date = Date Integer Month Integer deriving (Eq, Show)
+
+validDate :: Date -> Bool
+validDate (Date d m y)
+  | d > 0 && d <= daysInMonth m y = True
+  | otherwise = False
