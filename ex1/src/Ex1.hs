@@ -12,6 +12,7 @@ module Ex1
     , daysInMonth
     , validDate
     , multiply
+    , substitute
     ) where
 
 import Data.Maybe
@@ -100,3 +101,8 @@ validDate (Date d m y)
 multiply :: Num a => [a] -> a
 multiply [] = 1
 multiply (x:xs) = x * multiply xs
+
+substitute :: Char -> Char -> String -> String
+substitute a b = map replace where
+  replace x | x == a = b
+            | otherwise = x
