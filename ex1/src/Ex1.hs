@@ -11,6 +11,7 @@ module Ex1
     , Date(..)
     , daysInMonth
     , validDate
+    , multiply
     ) where
 
 import Data.Maybe
@@ -95,3 +96,7 @@ validDate :: Date -> Bool
 validDate (Date d m y)
   | d > 0 && d <= daysInMonth m y = True
   | otherwise = False
+
+multiply :: Num a => [a] -> a
+multiply [] = 1
+multiply (x:xs) = x * multiply xs

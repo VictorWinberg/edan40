@@ -71,10 +71,18 @@ mapnumFactorsTests = testGroup "mapnumFactors tests"
   , testCase "negative" $ mapnumFactors (-1) @?= -1
   ]
 
+multiplyTests = testGroup "multiply tests"
+  [ testCase "empty list" $ multiply [] @?= 1
+  , testCase "single element" $ multiply [1] @?= 1
+  , testCase "two elements" $ multiply [2,3] @?= 6
+  , testCase "multiple elements" $ multiply [1,2,3,4,5] @?= 120
+  ]
+
 propertyTests = testGroup "property tests"
   [ testProperty "recsumsq same as mapsumsq" sumsqRecSameAsMap
   , testProperty "rechanoi same as maphanoi" hanoiRecSameAsMap
   , testProperty "recnumFactors same as mapnumFactors" numFactorsRecSameAsMap
+  , testProperty "multiply same as product" multiplySameAsProduct
   ]
 
 sumsqRecSameAsMap :: Integer -> Bool
@@ -86,6 +94,9 @@ hanoiRecSameAsMap x = rechanoi x == maphanoi x
 numFactorsRecSameAsMap :: Integer -> Bool
 numFactorsRecSameAsMap x = recnumFactors x == mapnumFactors x
 
+multiplySameAsProduct :: [Integer] -> Bool
+multiplySameAsProduct list = multiply list == product list
+
 allTests = testGroup "all tests"
   [ maxiTests
   , recsumsqTests
@@ -95,6 +106,7 @@ allTests = testGroup "all tests"
   , smallestFactorTests
   , recnumFactorsTests
   , mapnumFactorsTests
+  , multiplyTests
   , propertyTests
   ]
 
