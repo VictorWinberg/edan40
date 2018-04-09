@@ -13,6 +13,7 @@ module Ex1
     , validDate
     , multiply
     , substitute
+    , triads
     ) where
 
 import Data.Maybe
@@ -106,3 +107,12 @@ substitute :: Char -> Char -> String -> String
 substitute a b = map replace where
   replace x | x == a = b
             | otherwise = x
+
+triads :: Integer -> [(Integer, Integer, Integer)]
+triads n = [ (a, b, round c) | a <- [1..n], b <- [1..n]
+           , let c = hypotenuse a b
+           , a <= b, c <= fromInteger n, isInt c
+           ]
+  where
+    hypotenuse a b = sqrt $ fromInteger $ a ^ 2 + b ^ 2
+    isInt x = floor x == ceiling x

@@ -84,6 +84,11 @@ substituteTests = testGroup "substitute tests"
   , testCase "two letters" $ substitute 'e' 'i' "eigenvalue" @?= "iiginvalui"
   ]
 
+triadsTests = testGroup "triads tests"
+  [ testCase "empty" $ triads 4 @?= []
+  , testCase "3 4 5" $ triads 5 @?= [(3,4,5)]
+  ]
+
 propertyTests = testGroup "property tests"
   [ testProperty "recsumsq same as mapsumsq" sumsqRecSameAsMap
   , testProperty "rechanoi same as maphanoi" hanoiRecSameAsMap
@@ -114,6 +119,7 @@ allTests = testGroup "all tests"
   , mapnumFactorsTests
   , multiplyTests
   , substituteTests
+  , triadsTests
   , propertyTests
   ]
 
