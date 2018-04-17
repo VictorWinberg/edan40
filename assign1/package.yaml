@@ -1,19 +1,18 @@
-name:                ex1
+name:                assign1
 version:             1.0.0
-github:              "VictorWinberg/edan40/ex1"
+github:              "VictorWinberg/edan40/assign1"
 license:             BSD3
-author:              "Victor Winberg"
-maintainer:          "dat14vwi@student.lu.se"
-copyright:           "2018 VictorWinberg"
+author:              "Victor Winberg and Emma Asklund"
 
 dependencies:
 - base >= 4.7 && < 5
+- random
 
 library:
   source-dirs: src
 
 executables:
-  ex1-exe:
+  assign1-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -21,10 +20,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - ex1
+    - assign1
 
 tests:
-  ex1-test:
+  assign1-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -32,7 +31,5 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - ex1
-    - tasty
-    - tasty-hunit
-    - tasty-quickcheck
+    - assign1
+    - HUnit
