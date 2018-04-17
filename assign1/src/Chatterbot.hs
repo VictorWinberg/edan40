@@ -66,7 +66,7 @@ present :: Phrase -> String
 present = unwords
 
 prepare :: String -> Phrase
-prepare = reduce . words . map toLower . filter (not . flip elem ".,:;*!#%&|") 
+prepare = reduce . words . map toLower . filter (not . flip elem ".,:;*!#%&|")
 
 rulesCompile :: [(String, [String])] -> BotBrain
 {- TO BE WRITTEN -}
@@ -105,24 +105,25 @@ reductionsApply _ = id
 
 -- Replaces a wildcard in a list with the list given as the third argument
 substitute :: Eq a => a -> [a] -> [a] -> [a]
-substitute _ _ _ = []
-{- TO BE WRITTEN -}
-
+substitute wildcard list replace = foldr (++) [] $ map sub list
+  where sub x | x == wildcard = replace
+              | otherwise     = [x]
 
 -- Tries to match two lists. If they match, the result consists of the sublist
 -- bound to the wildcard in the pattern list.
 match :: Eq a => a -> [a] -> [a] -> Maybe [a]
-match _ _ _ = Nothing
-{- TO BE WRITTEN -}
-
+match _ [] [] = Just []
+match _ [] _ = Nothing
+match _ _ [] = Nothing
+match wc (p:ps) (x:xs)
+  | p  == x = match wc ps xs
+  | wc == p = orElse (singleWildcardMatch (p:ps) (x:xs)) (longerWildcardMatch (p:ps) (x:xs))
+  | otherwise = Nothing
 
 -- Helper function to match
 singleWildcardMatch, longerWildcardMatch :: Eq a => [a] -> [a] -> Maybe [a]
-singleWildcardMatch (wc:ps) (x:xs) = Nothing
-{- TO BE WRITTEN -}
-longerWildcardMatch (wc:ps) (x:xs) = Nothing
-{- TO BE WRITTEN -}
-
+singleWildcardMatch (wc:ps) (x:xs) = mmap (const [x]) $ match wc ps xs
+longerWildcardMatch (wc:ps) (x:xs) = mmap (x:) $ match wc (wc:ps) xs
 
 
 -- Test cases --------------------
@@ -153,5 +154,3 @@ transformationApply _ _ _ _ = Nothing
 transformationsApply :: Eq a => a -> ([a] -> [a]) -> [([a], [a])] -> [a] -> Maybe [a]
 transformationsApply _ _ _ _ = Nothing
 {- TO BE WRITTEN -}
-
-
