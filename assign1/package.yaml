@@ -32,4 +32,6 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - assign1
-    - HUnit
+    - tasty
+    - tasty-hunit
+    - tasty-quickcheck

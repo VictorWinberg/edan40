@@ -1,81 +1,75 @@
 import Chatterbot
-import Test.HUnit
 
-reflectTest =
-  test [
+import Test.Tasty
+import Test.Tasty.HUnit
+
+reflectTest = testCase "reflect test" $
     reflect ["i", "will", "never", "see", "my", "reflection", "in", "your", "eyes"]
-        ~?= ["you", "will", "never", "see", "your", "reflection", "in", "my", "eyes"]
-  ]
+        @?= ["you", "will", "never", "see", "your", "reflection", "in", "my", "eyes"]
 
 transformations = [(words "I hate *", words "Why do you hate * ?")]
 
-rulesApplyTest =
-  test [
-    rulesApply transformations (words "I hate my mother")
-      ~?= (words "Why do you hate your mother ?"),
-    rulesApply transformations (words "ARGH!")
-      ~?= (words "")
+rulesApplyTest = testGroup "rulesApply tests" [
+    testCase "mother" $ rulesApply transformations (words "I hate my mother")
+      @?= (words "Why do you hate your mother ?"),
+    testCase "argh!" $ rulesApply transformations (words "ARGH!")
+      @?= (words "")
   ]
 
-reduceTest =
-  test [
-    (reduce.words) "can you please tell me what Haskell is" ~?= words "what is Haskell"
-  ]
+reduceTest = testCase "reduce" $
+    (reduce.words) "can you please tell me what Haskell is" @?= words "what is Haskell"
 
-substituteSpecTest =
-  test [
-    substitute 'x' "3*cos(x) + 4 - x" "5.37" ~?= "3*cos(5.37) + 4 - 5.37"
-  ]
+substituteSpecTest = testCase "substitute test" $
+    substitute 'x' "3*cos(x) + 4 - x" "5.37" @?= "3*cos(5.37) + 4 - 5.37"
 
-matchSpecTest =
-  test [
-    match 'x' "2*x+3" "2*7+3" ~?= Just "7",
-    match '*' "frodo" "gandalf" ~?= Nothing,
-    match 2 [1,3..5] [1,3..5] ~?= Just [],
-    match '*' "* and *" "you and me" ~?= Just "you",
-    match 'x' "2*x+3+x" "2*7+3" ~?= Nothing,
-    match '*' "*do" "bdo" ~?= Just "b",
-    match '*' "*do" "dobedo" ~?= Just "dobe",
-    match '*' "*do" "bedobe" ~?= Nothing,
-    match '*' "" "" ~?= Just [],
-    match '*' "abba" "" ~?= Nothing,
-    match '*' "" "abba" ~?= Nothing,
-    match '*' "a" "a" ~?= Just [],
-    match '*' "*" "a" ~?= Just "a",
-    match '*' "*" "abba" ~?= Just "abba",
-    match '*' "*X*" "aXb" ~?= Just "a",
-    match '*' "*X*" "aaXbb" ~?= Just "aa"
+matchSpecTest = testGroup "matchSpec tests" [
+    testCase "math" $ match 'x' "2*x+3" "2*7+3" @?= Just "7",
+    testCase "gandalf" $ match '*' "frodo" "gandalf" @?= Nothing,
+    testCase "list" $ match 2 [1,3..5] [1,3..5] @?= Just [],
+    testCase "you and me" $ match '*' "* and *" "you and me" @?= Just "you",
+    testCase "math" $ match 'x' "2*x+3+x" "2*7+3" @?= Nothing,
+    testCase "bdo" $ match '*' "*do" "bdo" @?= Just "b",
+    testCase "dobedo" $ match '*' "*do" "dobedo" @?= Just "dobe",
+    testCase "bedobe" $ match '*' "*do" "bedobe" @?= Nothing,
+    testCase "empty" $ match '*' "" "" @?= Just [],
+    testCase "abba" $ match '*' "abba" "" @?= Nothing,
+    testCase "abba" $ match '*' "" "abba" @?= Nothing,
+    testCase "a" $ match '*' "a" "a" @?= Just [],
+    testCase "a" $ match '*' "*" "a" @?= Just "a",
+    testCase "abba" $ match '*' "*" "abba" @?= Just "abba",
+    testCase "aXb" $ match '*' "*X*" "aXb" @?= Just "a",
+    testCase "aaXbb" $ match '*' "*X*" "aaXbb" @?= Just "aa"
   ]
 
 frenchPresentation = ("My name is *", "Je m'appelle *")
 
-transformationApplyTest =
-  test [
-    transformationApply '*' id "My name is Zacharias" frenchPresentation
-      ~?= Just "Je m'appelle Zacharias",
-    transformationApply '*' id "My shoe size is 45" frenchPresentation
-      ~?= Nothing
+transformationApplyTest = testGroup "transformationApply tests" [
+    testCase "Zacharias" $ transformationApply '*' id "My name is Zacharias" frenchPresentation
+      @?= Just "Je m'appelle Zacharias",
+    testCase "45" $ transformationApply '*' id "My shoe size is 45" frenchPresentation
+      @?= Nothing
   ]
 
 swedishPresentation = ("My name is *", "Mitt namn är *")
 presentations = [frenchPresentation, swedishPresentation]
 
-transformationsApplyTest =
-  test [
-    transformationsApply '*' id presentations "My name is Zacharias"
-      ~?= Just "Je m'appelle Zacharias",
-    transformationsApply '*' id (reverse presentations) "My name is Zacharias"
-      ~?= Just "Mitt namn är Zacharias",
-    transformationsApply '*' id (reverse presentations) "My shoe size is 45"
-      ~?= Nothing
+transformationsApplyTest = testGroup "transformationsApply tests" [
+    testCase "Zacharias" $ transformationsApply '*' id presentations "My name is Zacharias"
+      @?= Just "Je m'appelle Zacharias",
+    testCase "Zacharias" $ transformationsApply '*' id (reverse presentations) "My name is Zacharias"
+      @?= Just "Mitt namn är Zacharias",
+    testCase "45" $ transformationsApply '*' id (reverse presentations) "My shoe size is 45"
+      @?= Nothing
   ]
 
-main = runTestTT $
-  test [
-    "substitute" ~: substituteSpecTest,
-    "match" ~: matchSpecTest,
-    "transformationApply" ~: transformationApplyTest,
-    "transformationsApply" ~: transformationsApplyTest,
-    "reflect" ~: reflectTest,
-    "rulesApply" ~: rulesApplyTest
+allTests = testGroup "all tests"
+  [ substituteSpecTest
+  , matchSpecTest
+  , transformationApplyTest
+  , transformationsApplyTest
+  , reflectTest
+  , rulesApplyTest
   ]
+
+main :: IO ()
+main = defaultMain allTests
