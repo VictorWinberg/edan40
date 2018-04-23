@@ -138,16 +138,15 @@ substituteCheck = substituteTest == testString
 matchTest = match '*' testPattern testString
 matchCheck = matchTest == Just testSubstitutions
 
-
-
 -------------------------------------------------------
 -- Applying patterns
 --------------------------------------------------------
 
 -- Applying a single pattern
 transformationApply :: Eq a => a -> ([a] -> [a]) -> [a] -> ([a], [a]) -> Maybe [a]
-transformationApply _ _ _ _ = Nothing
-{- TO BE WRITTEN -}
+transformationApply wc _ x p
+  | Just m <- match wc (fst p) x = Just $ substitute wc (snd p) m
+  | otherwise = Nothing
 
 
 -- Applying a list of patterns until one succeeds
