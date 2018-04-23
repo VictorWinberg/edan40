@@ -1,16 +1,18 @@
 module Chatterbot where
 import Utilities
 import System.Random
+import System.IO
 import Data.Char
 
 chatterbot :: String -> [(String, [String])] -> IO ()
 chatterbot botName botRules = do
-    putStrLn ("\n\nHi! I am " ++ botName ++ ". How are you?")
+    putStrLn ("\n\n" ++ botName ++ ": Hi! I am " ++ botName ++ ". How are you?")
     botloop
   where
     brain = rulesCompile botRules
     botloop = do
-      putStr "\n: "
+      putStr "You: "
+      hFlush stdout
       question <- getLine
       answer <- stateOfMind brain
       putStrLn (botName ++ ": " ++ (present . answer . prepare) question)
