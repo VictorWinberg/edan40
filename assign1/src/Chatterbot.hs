@@ -28,11 +28,11 @@ type BotBrain = [(Phrase, [Phrase])]
 --------------------------------------------------------
 
 stateOfMind :: BotBrain -> IO (Phrase -> Phrase)
-{- TO BE WRITTEN -}
-stateOfMind _ = return id
+-- TODO: make random
+stateOfMind brain = return $ rulesApply $ map (map2 (id, head)) brain
 
 rulesApply :: [PhrasePair] -> Phrase -> Phrase
-rulesApply p x = maybe [] id $ transformationsApply "*" reflect p x
+rulesApply = try . transformationsApply "*" reflect
 
 reflect :: Phrase -> Phrase
 reflect = map $ try $ flip lookup reflections
@@ -69,9 +69,7 @@ prepare :: String -> Phrase
 prepare = reduce . words . map toLower . filter (not . flip elem ".,:;*!#%&|")
 
 rulesCompile :: [(String, [String])] -> BotBrain
-{- TO BE WRITTEN -}
-rulesCompile _ = []
-
+rulesCompile = map $ map2 (words . map toLower, map words)
 
 --------------------------------------
 

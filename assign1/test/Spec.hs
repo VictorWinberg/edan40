@@ -16,7 +16,7 @@ rulesApplyTest = testGroup "rulesApply tests" [
     testCase "hate mother" $ rulesApply transformations (words "I hate my mother")
       @?= (words "Why do you hate your mother ?"),
     testCase "argh!" $ rulesApply transformations (words "ARGH!")
-      @?= (words ""),
+      @?= (words "ARGH!"),
     testCase "like mother" $ rulesApply transformations (words "I like my mother")
       @?= (words "I also like your mother .")
   ]
