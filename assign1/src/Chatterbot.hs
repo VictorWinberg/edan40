@@ -34,8 +34,7 @@ rulesApply :: [PhrasePair] -> Phrase -> Phrase
 rulesApply _ = id
 
 reflect :: Phrase -> Phrase
-{- TO BE WRITTEN -}
-reflect = id
+reflect x = map (try (flip lookup reflections)) x
 
 reflections =
   [ ("am",     "are"),
