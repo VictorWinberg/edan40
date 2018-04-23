@@ -14,6 +14,7 @@ module Ex1
     , multiply
     , substitute
     , triads
+    , mystery
     ) where
 
 import Data.Maybe
@@ -116,3 +117,5 @@ triads n = [ (a, b, round c) | a <- [1..n], b <- [1..n]
   where
     hypotenuse a b = sqrt $ fromInteger $ a ^ 2 + b ^ 2
     isInt x = floor x == ceiling x
+
+mystery xs = foldr (++) [] (map (\y -> [y]) xs)
