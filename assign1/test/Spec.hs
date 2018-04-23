@@ -7,13 +7,18 @@ reflectTest = testCase "reflect test" $
     reflect ["i", "will", "never", "see", "my", "reflection", "in", "your", "eyes"]
         @?= ["you", "will", "never", "see", "your", "reflection", "in", "my", "eyes"]
 
-transformations = [(words "I hate *", words "Why do you hate * ?")]
+transformations = [
+    (words "I hate *", words "Why do you hate * ?"),
+    (words "I like *", words "I also like * .")
+  ]
 
 rulesApplyTest = testGroup "rulesApply tests" [
-    testCase "mother" $ rulesApply transformations (words "I hate my mother")
+    testCase "hate mother" $ rulesApply transformations (words "I hate my mother")
       @?= (words "Why do you hate your mother ?"),
     testCase "argh!" $ rulesApply transformations (words "ARGH!")
-      @?= (words "")
+      @?= (words ""),
+    testCase "like mother" $ rulesApply transformations (words "I like my mother")
+      @?= (words "I also like your mother .")
   ]
 
 reduceTest = testCase "reduce" $
