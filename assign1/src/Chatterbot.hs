@@ -30,11 +30,10 @@ stateOfMind :: BotBrain -> IO (Phrase -> Phrase)
 stateOfMind _ = return id
 
 rulesApply :: [PhrasePair] -> Phrase -> Phrase
-{- TO BE WRITTEN -}
-rulesApply _ = id
+rulesApply p x = maybe [] id $ transformationsApply "*" reflect p x
 
 reflect :: Phrase -> Phrase
-reflect x = map (try (flip lookup reflections)) x
+reflect = map $ try $ flip lookup reflections
 
 reflections =
   [ ("am",     "are"),
@@ -143,9 +142,7 @@ matchCheck = matchTest == Just testSubstitutions
 
 -- Applying a single pattern
 transformationApply :: Eq a => a -> ([a] -> [a]) -> [a] -> ([a], [a]) -> Maybe [a]
-transformationApply wc _ x p
-  | Just m <- match wc (fst p) x = Just $ substitute wc (snd p) m
-  | otherwise = Nothing
+transformationApply wc f x p = mmap (substitute wc (snd p) . f) $ match wc (fst p) x
 
 
 -- Applying a list of patterns until one succeeds
