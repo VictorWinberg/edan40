@@ -151,5 +151,5 @@ transformationApply wc _ x p
 
 -- Applying a list of patterns until one succeeds
 transformationsApply :: Eq a => a -> ([a] -> [a]) -> [([a], [a])] -> [a] -> Maybe [a]
-transformationsApply _ _ _ _ = Nothing
-{- TO BE WRITTEN -}
+transformationsApply _ _ [] _ = Nothing
+transformationsApply wc f (p:ps) x = orElse (transformationApply wc f x p) (transformationsApply wc f ps x)
