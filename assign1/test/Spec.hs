@@ -3,6 +3,10 @@ import Chatterbot
 import Test.Tasty
 import Test.Tasty.HUnit
 
+reductionTest = testCase "reduction test" $
+  reductionsApply reductions (words "can you please tell me what Haskell is")
+                         @?= (words "what is Haskell")
+
 reflectTest = testCase "reflect test" $
     reflect ["i", "will", "never", "see", "my", "reflection", "in", "your", "eyes"]
         @?= ["you", "will", "never", "see", "your", "reflection", "in", "my", "eyes"]
@@ -74,6 +78,7 @@ allTests = testGroup "all tests"
   , transformationsApplyTest
   , reflectTest
   , rulesApplyTest
+  , reductionTest
   ]
 
 main :: IO ()
