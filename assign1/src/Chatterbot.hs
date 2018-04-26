@@ -69,7 +69,7 @@ prepare :: String -> Phrase
 prepare = reduce . words . map toLower . filter (not . flip elem ".,:;*!#%&|")
 
 rulesCompile :: [(String, [String])] -> BotBrain
-rulesCompile = map $ map2 (words . map toLower, map words)
+rulesCompile = (map . map2) (words . map toLower, map words)
 
 --------------------------------------
 
