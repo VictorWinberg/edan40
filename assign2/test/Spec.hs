@@ -3,13 +3,22 @@ import StringAlignment
 import Test.Tasty
 import Test.Tasty.HUnit
 
-similarityScoreTest = testGroup "reduction test"
+similarityScoreTests = testGroup "reduction tests"
   [ testCase "haskell pascal" $ similarityScore "HASKELL" "PASCA-L" @?= (-2)
   , testCase "haskell pascal" $ similarityScore "H-ASKELL" "-PASC-AL" @?= (-5)
+  , testCase "writers vintner" $ similarityScore "writers" "vintner" @?= (-5)
   ]
 
+attachHeadsTest = testCase "attach heads test" $
+  attachHeads 'a' 'b' [("hej","då"), ("k", "bry")] @?= [("ahej","bdå"), ("ak", "bbry")]
+
+maximaByTest = testCase "maximaBy test" $
+  maximaBy length ["cs", "efd", "lth", "it"] @?= ["efd", "lth"]
+
 allTests = testGroup "all tests"
-  [ similarityScoreTest
+  [ similarityScoreTests
+  , attachHeadsTest
+  , maximaByTest
   ]
 
 main :: IO ()
