@@ -1,5 +1,7 @@
 module StringAlignment where
 
+type AlignmentType = (String,String)
+
 similarityScore :: String -> String -> Int
 similarityScore [] _ = 0
 similarityScore _ [] = 0
@@ -19,3 +21,7 @@ attachHeads h1 h2 aList = [(h1:xs,h2:ys) | (xs,ys) <- aList]
 
 maximaBy :: Ord b => (a -> b) -> [a] -> [a]
 maximaBy valueFcn xs = undefined
+
+-- which returns a list of all optimal alignments between string1 and string2.
+optAlignments :: String -> String -> [AlignmentType]
+optAlignments string1 string2 = undefined
