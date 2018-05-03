@@ -12,6 +12,7 @@ scoreMismatch = (-1)
 scoreSpace = (-1)
 
 similarityScore :: String -> String -> Int
+similarityScore [] [] = 0
 similarityScore [] _ = scoreSpace
 similarityScore _ [] = scoreSpace
 similarityScore (x:xs) (y:ys) = maximum
@@ -46,15 +47,15 @@ type AlignmentType = (String,String)
 -- which returns a list of all optimal alignments between string1 and string2.
 optAlignments :: String -> String -> [AlignmentType]
 optAlignments xs ys = maximaBy alignScore $ alignments xs ys
-  where alignments _ [] = []
-        alignments [] _ = []
+  where alignments [] [] = [("", "")]
+        alignments (x:xs) [] = attachHeads x '-' $ alignments xs []
+        alignments [] (y:ys) = attachHeads '-' y $ alignments [] ys
         alignments (x:xs) (y:ys) = concat
-          [ attachHeads x y $ (xs, ys) : alignments xs ys
-          , attachHeads '-' y $ (xs, ys) : alignments (x:xs) ys
-          , attachHeads x '-' $ (xs, ys) : alignments xs (y:ys)
+          [ attachHeads x y $ alignments xs ys
+          , attachHeads x '-' $ alignments xs (y:ys)
+          , attachHeads '-' y $ alignments (x:xs) ys
           ]
-        alignScore ([], _) = scoreSpace
-        alignScore (_, []) = scoreSpace
+        alignScore ([], []) = 0
         alignScore ((x:xs),(y:ys)) = score x y + alignScore (xs,ys)
 
 
