@@ -4,8 +4,7 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 similarityScoreTests = testGroup "reduction tests"
-  [ testCase "haskell pascal" $ similarityScore "HASKELL" "PASCA-L" @?= (-2)
-  , testCase "haskell pascal" $ similarityScore "H-ASKELL" "-PASC-AL" @?= (-5)
+  [ testCase "haskell pascal" $ similarityScore "HASKELL" "PASCAL" @?= (-4)
   , testCase "writers vintner" $ similarityScore "writers" "vintner" @?= (-5)
   ]
 
