@@ -14,10 +14,14 @@ attachHeadsTest = testCase "attach heads test" $
 maximaByTest = testCase "maximaBy test" $
   maximaBy length ["cs", "efd", "lth", "it"] @?= ["efd", "lth"]
 
+optimalAlignTest = testCase "optimal alignment test" $
+  optAlignments "writers" "vintner" @?= [("writ-ers","vintner-"), ("wri-t-ers","-vintner-"), ("wri-t-ers","v-intner-")]
+
 allTests = testGroup "all tests"
   [ similarityScoreTests
   , attachHeadsTest
   , maximaByTest
+  , optimalAlignTest
   ]
 
 main :: IO ()

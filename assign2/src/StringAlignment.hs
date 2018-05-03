@@ -4,6 +4,8 @@ scoreMatch = 0
 scoreMismatch = (-1)
 scoreSpace = (-1)
 
+type AlignmentType = (String,String)
+
 similarityScore :: String -> String -> Int
 similarityScore [] _ = scoreSpace
 similarityScore _ [] = scoreSpace
@@ -31,3 +33,8 @@ maximaBy :: Ord b => (a -> b) -> [a] -> [a]
 maximaBy _ [] = []
 maximaBy f xs = filter (\x -> f x == maxi) xs
   where maxi = maximum $ map f xs
+
+
+-- which returns a list of all optimal alignments between string1 and string2.
+optAlignments :: String -> String -> [AlignmentType]
+optAlignments string1 string2 = undefined
