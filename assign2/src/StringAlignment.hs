@@ -51,7 +51,13 @@ optAlignments string1 string2 = undefined
 
 outputOptAlignments :: String -> String -> IO ()
 outputOptAlignments string1 string2 = do
-  putStrLn $ "There are " ++ string1 ++ " optimal alignments:"
-    where list = length(optAlignments string1 string2)
-  -- name <- getLine
-  -- putStrLn ("Hey " ++ name ++ ", you rock!")
+  putStr "There are "
+  putStr (show (length(attachHeads 'a' 'b' [("abc", "cde"), ("efg", "hij")])))
+  putStrLn " optimal alignments: \n"
+
+  mapM_ (\(a,b) -> putStrLn (a++"\n"++b++"\n")) $ attachHeads 'a' 'b' [("abc", "def"), ("ghi", "jkl")]
+
+
+  putStr "There were "
+  putStr (show (length(attachHeads 'a' 'b' [("abc", "cde"), ("efg", "hij")])))
+  putStr " optimal alignments!\n"
