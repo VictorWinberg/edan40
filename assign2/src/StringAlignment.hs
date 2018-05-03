@@ -61,13 +61,11 @@ optAlignments xs ys = maximaBy alignScore $ alignments xs ys
 
 outputOptAlignments :: String -> String -> IO ()
 outputOptAlignments string1 string2 = do
+  let opt = optAlignments string1 string2
   putStr "There are "
-  putStr (show (length(attachHeads 'a' 'b' [("abc", "cde"), ("efg", "hij")])))
+  putStr (show (length(opt)))
   putStrLn " optimal alignments: \n"
-
-  mapM_ (\(a,b) -> putStrLn (a++"\n"++b++"\n")) $ attachHeads 'a' 'b' [("abc", "def"), ("ghi", "jkl")]
-
-
+  mapM_ (\(a,b) -> putStrLn (a++"\n"++b++"\n")) $ opt
   putStr "There were "
-  putStr (show (length(attachHeads 'a' 'b' [("abc", "cde"), ("efg", "hij")])))
+  putStr (show (length(opt)))
   putStr " optimal alignments!\n"
