@@ -20,7 +20,10 @@ attachHeads :: a -> a -> [([a],[a])] -> [([a],[a])]
 attachHeads h1 h2 aList = [(h1:xs,h2:ys) | (xs,ys) <- aList]
 
 maximaBy :: Ord b => (a -> b) -> [a] -> [a]
-maximaBy valueFcn xs = undefined
+maximaBy _ [] = []
+maximaBy f xs = filter (\x -> f x == maxi) xs
+  where maxi = maximum $ map f xs
+
 
 -- which returns a list of all optimal alignments between string1 and string2.
 optAlignments :: String -> String -> [AlignmentType]
