@@ -8,15 +8,25 @@ module StringAlignment
     ) where
 
 
+scoreMatch = 0
+scoreMismatch = (-1)
+scoreSpace = (-1)
+
 type AlignmentType = (String,String)
 
 similarityScore :: String -> String -> Int
-similarityScore [] _ = 0
-similarityScore _ [] = 0
-similarityScore (x:xs) (y:ys)
-  | x == '-' || y == '-' = (-2) + similarityScore xs ys
-  | x == y = 1 + similarityScore xs ys
-  | otherwise = (-1) + similarityScore xs ys
+similarityScore [] _ = scoreSpace
+similarityScore _ [] = scoreSpace
+similarityScore (x:xs) (y:ys) = maximum
+  [ similarityScore xs ys + score x y
+  , similarityScore xs (y:ys) + score x '-'
+  , similarityScore (x:xs) ys + score '-' y
+  ]
+  where score x '-'   = scoreSpace
+        score '-' y   = scoreSpace
+        score x y
+          | x == y    = scoreMatch
+          | otherwise = scoreMismatch
 
 {-attachHeads is adding h1 and h2 first in  each of the element in one duples.
 The funtion does this for all the duples in the list.
