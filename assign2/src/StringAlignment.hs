@@ -7,12 +7,9 @@ module StringAlignment
     , outputOptAlignments
     ) where
 
-
 scoreMatch = 0
 scoreMismatch = (-1)
 scoreSpace = (-1)
-
-type AlignmentType = (String,String)
 
 similarityScore :: String -> String -> Int
 similarityScore [] _ = scoreSpace
@@ -22,11 +19,13 @@ similarityScore (x:xs) (y:ys) = maximum
   , similarityScore xs (y:ys) + score x '-'
   , similarityScore (x:xs) ys + score '-' y
   ]
-  where score x '-'   = scoreSpace
-        score '-' y   = scoreSpace
-        score x y
-          | x == y    = scoreMatch
-          | otherwise = scoreMismatch
+
+score :: Char -> Char -> Int
+score x '-'   = scoreSpace
+score '-' y   = scoreSpace
+score x y
+  | x == y    = scoreMatch
+  | otherwise = scoreMismatch
 
 {-attachHeads is adding h1 and h2 first in  each of the element in one duples.
 The funtion does this for all the duples in the list.
@@ -42,11 +41,21 @@ maximaBy _ [] = []
 maximaBy f xs = filter (\x -> f x == maxi) xs
   where maxi = maximum $ map f xs
 
+type AlignmentType = (String,String)
 
 -- which returns a list of all optimal alignments between string1 and string2.
 optAlignments :: String -> String -> [AlignmentType]
-optAlignments string1 string2 = undefined
-
+optAlignments xs ys = maximaBy alignScore $ alignments xs ys
+  where alignments _ [] = []
+        alignments [] _ = []
+        alignments (x:xs) (y:ys) = concat
+          [ attachHeads x y $ (xs, ys) : alignments xs ys
+          , attachHeads '-' y $ (xs, ys) : alignments (x:xs) ys
+          , attachHeads x '-' $ (xs, ys) : alignments xs (y:ys)
+          ]
+        alignScore ([], _) = scoreSpace
+        alignScore (_, []) = scoreSpace
+        alignScore ((x:xs),(y:ys)) = score x y + alignScore (xs,ys)
 
 
 outputOptAlignments :: String -> String -> IO ()
