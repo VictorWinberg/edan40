@@ -1,4 +1,12 @@
-module StringAlignment where
+module StringAlignment
+    ( AlignmentType(..)
+    , similarityScore
+    , attachHeads
+    , maximaBy
+    , optAlignments
+    , outputOptAlignments
+    ) where
+
 
 type AlignmentType = (String,String)
 
@@ -28,3 +36,8 @@ maximaBy f xs = filter (\x -> f x == maxi) xs
 -- which returns a list of all optimal alignments between string1 and string2.
 optAlignments :: String -> String -> [AlignmentType]
 optAlignments string1 string2 = undefined
+
+
+
+outputOptAlignments :: String -> String -> IO ()
+outputOptAlignments string1 string2 = undefined
