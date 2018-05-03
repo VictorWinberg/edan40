@@ -1,0 +1,36 @@
+name:                assign2
+version:             1.0.0
+github:              "VictorWinberg/edan40/assign2"
+license:             BSD3
+author:              "Victor Winberg and Emma Asklund"
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  assign2-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - assign2
+
+tests:
+  assign2-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - assign2
+    - tasty
+    - tasty-hunit
+    - tasty-quickcheck
