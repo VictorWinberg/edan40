@@ -10,4 +10,4 @@ main = do
       string1 = "writers"
       string2 = "vintner"
 
-  print $ attachHeads 'a' 'b' [("abc", "def"), ("ghi", "jkl")]
+  outputOptAlignments string1 string2

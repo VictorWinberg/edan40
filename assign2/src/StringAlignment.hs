@@ -50,4 +50,8 @@ optAlignments string1 string2 = undefined
 
 
 outputOptAlignments :: String -> String -> IO ()
-outputOptAlignments string1 string2 = undefined
+outputOptAlignments string1 string2 = do
+  putStrLn $ "There are " ++ string1 ++ " optimal alignments:"
+    where list = length(optAlignments string1 string2)
+  -- name <- getLine
+  -- putStrLn ("Hey " ++ name ++ ", you rock!")
