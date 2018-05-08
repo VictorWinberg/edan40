@@ -20,7 +20,7 @@ optimalAlignPrimeTest = testCase "optimal align prime" $
 
 optimalAlignTest = testGroup "optimal align tests"
   [ testCase "easy" $ optAlignments "writers" "vintner" @?= [("writ-ers","vintner-"), ("wri-t-ers","-vintner-"), ("wri-t-ers","v-intner-")]
-  -- , testCase "medium " $ optAlignments "aferociousmonadatemyhamster" "functionalprogrammingrules" @?= [("writ-ers","vintner-"), ("wri-t-ers","v-intner-"), ("wri-t-ers","-vintner-")]
+  , testCase "medium " $ length (optAlignments "aferociousmonadatemyhamster" "functionalprogrammingrules") @?= 308
   ]
 
 allTests = testGroup "all tests"

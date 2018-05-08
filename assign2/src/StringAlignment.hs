@@ -74,7 +74,7 @@ optAlignments xs ys = maximaBy alignScore $ alignmentsLen (length xs) (length y
     alignmentsEntry 0 0 = [("", "")]
     alignmentsEntry i 0 = attachTails (get_x i) '-' $ alignmentsLen (i-1) 0
     alignmentsEntry 0 j = attachTails '-' (get_y j) $ alignmentsLen 0 (j-1)
-    alignmentsEntry i j = concat
+    alignmentsEntry i j = maximaBy alignScore $ concat
       [ attachTails (get_x i) (get_y j) $ alignmentsLen (i-1) (j-1)
       , attachTails (get_x i) '-' $ alignmentsLen (i-1) j
       , attachTails '-' (get_y j) $ alignmentsLen i (j-1)
