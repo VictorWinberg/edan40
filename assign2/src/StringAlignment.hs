@@ -40,6 +40,9 @@ gives us [(abcd, efgh), (ajkl, enop)]-}
 attachHeads :: a -> a -> [([a],[a])] -> [([a],[a])]
 attachHeads h1 h2 aList = [(h1:xs,h2:ys) | (xs,ys) <- aList]
 
+attachTails :: a -> a -> [([a],[a])] -> [([a],[a])]
+attachTails h1 h2 aList = [(xs ++ [h1],ys ++ [h2]) | (xs,ys) <- aList]
+
 maximaBy :: Ord b => (a -> b) -> [a] -> [a]
 maximaBy _ [] = []
 maximaBy f xs = filter (\x -> f x == maxi) xs
@@ -69,12 +72,12 @@ optAlignments xs ys = maximaBy alignScore $ alignmentsLen (length xs) (length y
 
     alignmentsEntry :: Int -> Int -> [AlignmentType]
     alignmentsEntry 0 0 = [("", "")]
-    alignmentsEntry i 0 = attachHeads (get_x i) '-' $ alignmentsLen (i-1) 0
-    alignmentsEntry 0 j = attachHeads '-' (get_y j) $ alignmentsLen 0 (j-1)
+    alignmentsEntry i 0 = attachTails (get_x i) '-' $ alignmentsLen (i-1) 0
+    alignmentsEntry 0 j = attachTails '-' (get_y j) $ alignmentsLen 0 (j-1)
     alignmentsEntry i j = concat
-      [ attachHeads (get_x i) (get_y j) $ alignmentsLen (i-1) (j-1)
-      , attachHeads (get_x i) '-' $ alignmentsLen (i-1) j
-      , attachHeads '-' (get_y j) $ alignmentsLen i (j-1)
+      [ attachTails (get_x i) (get_y j) $ alignmentsLen (i-1) (j-1)
+      , attachTails (get_x i) '-' $ alignmentsLen (i-1) j
+      , attachTails '-' (get_y j) $ alignmentsLen i (j-1)
       ]
     alignScore ([], []) = 0
     alignScore ((x:xs),(y:ys)) = score x y + alignScore (xs,ys)
