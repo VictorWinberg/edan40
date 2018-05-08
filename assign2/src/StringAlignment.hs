@@ -2,6 +2,7 @@ module StringAlignment
     ( AlignmentType(..)
     , similarityScore
     , attachHeads
+    , attachScoreTails
     , maximaBy
     , optAlignments
     , optAlignments'
@@ -40,8 +41,9 @@ gives us [(abcd, efgh), (ajkl, enop)]-}
 attachHeads :: a -> a -> [([a],[a])] -> [([a],[a])]
 attachHeads h1 h2 aList = [(h1:xs,h2:ys) | (xs,ys) <- aList]
 
-attachTails :: a -> a -> [([a],[a])] -> [([a],[a])]
-attachTails h1 h2 aList = [(xs ++ [h1],ys ++ [h2]) | (xs,ys) <- aList]
+attachScoreTails :: Int -> Char -> Char -> (Int,[AlignmentType]) -> (Int,[AlignmentType])
+attachScoreTails s c1 c2 (score,alignments) =
+  (score + s, [(xs ++ [c1],ys ++ [c2]) | (xs,ys) <- alignments])
 
 maximaBy :: Ord b => (a -> b) -> [a] -> [a]
 maximaBy _ [] = []
@@ -65,24 +67,25 @@ optAlignments' xs ys = maximaBy alignScore $ alignments xs ys
         alignScore ((x:xs),(y:ys)) = score x y + alignScore (xs,ys)
 
 optAlignments :: String -> String -> [AlignmentType]
-optAlignments xs ys = maximaBy alignScore $ alignmentsLen (length xs) (length ys)
+optAlignments xs ys = snd $ alignmentsLen (length xs) (length ys)
   where 
     alignmentsLen i j = alignmentsTable!!i!!j
     alignmentsTable = [[ alignmentsEntry i j | j <- [0..]] | i<-[0..] ]
 
-    alignmentsEntry :: Int -> Int -> [AlignmentType]
-    alignmentsEntry 0 0 = [("", "")]
-    alignmentsEntry i 0 = attachTails (get_x i) '-' $ alignmentsLen (i-1) 0
-    alignmentsEntry 0 j = attachTails '-' (get_y j) $ alignmentsLen 0 (j-1)
-    alignmentsEntry i j = maximaBy alignScore $ concat
-      [ attachTails (get_x i) (get_y j) $ alignmentsLen (i-1) (j-1)
-      , attachTails (get_x i) '-' $ alignmentsLen (i-1) j
-      , attachTails '-' (get_y j) $ alignmentsLen i (j-1)
-      ]
-    alignScore ([], []) = 0
-    alignScore ((x:xs),(y:ys)) = score x y + alignScore (xs,ys)
-    get_x i = xs!!(i-1)
-    get_y j = ys!!(j-1)
+    alignmentsEntry :: Int -> Int -> (Int, [AlignmentType])
+    alignmentsEntry 0 0 = (0, [("", "")])
+    alignmentsEntry i 0 = attachScoreTails scoreSpace (xs!!(i-1)) '-' $ alignmentsLen (i-1) 0
+    alignmentsEntry 0 j = attachScoreTails scoreSpace '-' (ys!!(j-1)) $ alignmentsLen 0 (j-1)
+    alignmentsEntry i j =
+      (maximum $ map fst alignments, concatMap snd $ maximaBy fst alignments)
+      where
+        alignments =
+          [ attachScoreTails (score x y) x y $ alignmentsLen (i-1) (j-1)
+          , attachScoreTails scoreSpace x '-' $ alignmentsLen (i-1) j
+          , attachScoreTails scoreSpace '-' y $ alignmentsLen i (j-1)
+          ]
+        x = xs!!(i-1)
+        y = ys!!(j-1)
 
 mcsLength' :: Eq a => [a] -> [a] -> Int
 mcsLength' _ [] = 0
