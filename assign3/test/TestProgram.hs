@@ -3,7 +3,7 @@ module TestProgram where
 
 import Program
 
-p, p1, p2, p3 :: Program.T
+p, p1, p2, p3, p4 :: Program.T
 p = fromString  ("\
 \read k;\
 \read n;\
@@ -28,7 +28,7 @@ p1 = fromString  ("\
 \    q := n/b;\
 \    r := n - q*b;\
 \    write r;\
-\    s := p*r+s;\                    
+\    s := p*r+s;\
 \    p := p*10;\
 \    n :=q;\
 \  end\
@@ -45,7 +45,7 @@ s1 = "\
 \    q := n/b;\
 \    r := n - q*b;\
 \    write r;\
-\    s := p*r+s;\                    
+\    s := p*r+s;\
 \    p := p*10;\
 \    n :=q;\
 \  end\
@@ -73,7 +73,7 @@ s4 = "\
 \    c := a^s;\
 \    d := 2^a;\
 \    write c;\
-\    write d;\                    
+\    write d;\
 \    a := a-1;\
 \  end\
 \write a;"
