@@ -76,6 +76,10 @@ value (Num n) dict = n
 value (Var v) dict
   | Just val <- Dictionary.lookup v dict = val
   | otherwise = error $ "undefined variable " ++ v
+value (Add t u) dict = undefined
+value (Sub t u) dict = undefined
+value (Mul t u) dict = undefined
+value (Div t u) dict = undefined
 
 instance Parse Expr where
     parse = expr
