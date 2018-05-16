@@ -20,6 +20,9 @@ buildAss (v, e) = Assignment v e
 ifElse = accept "if" -# Expr.parse #- require "then" # parse #- require "else" # parse >-> buildIfElse
 buildIfElse ((e, s1), s2) = If e s1 s2
 
+while = accept "while" -# Expr.parse #- require "do" # parse >-> buildWhile
+buildWhile (e, s) = While e s
+
 exec :: [T] -> Dictionary.T String Integer -> [Integer] -> [Integer]
 exec (If cond thenStmts elseStmts: stmts) dict input =
     if (Expr.value cond dict)>0
@@ -28,5 +31,5 @@ exec (If cond thenStmts elseStmts: stmts) dict input =
 
 
 instance Parse Statement where
-  parse = assignment
+  parse = assignment ! ifElse ! while
   toString = error "Statement.toString not implemented"
