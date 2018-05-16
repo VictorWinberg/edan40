@@ -1,0 +1,36 @@
+name:                assign3
+version:             1.0.0
+github:              "VictorWinberg/edan40/assign3"
+license:             BSD3
+author:              "Victor Winberg and Emma Asklund"
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  assign3-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - assign3
+
+tests:
+  assign3-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - assign3
+    - tasty
+    - tasty-hunit
+    - tasty-quickcheck

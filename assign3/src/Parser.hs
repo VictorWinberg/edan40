@@ -8,9 +8,6 @@ infixl 7 -#, #-
 
 type T a = Parser a
 
-letter :: Parser Char.
--- letter is a parser for a letter as defined by the Prelude function isAlpha.
-
 err :: String -> Parser a
 err message cs = error (message++" near "++cs++"\n")
 
