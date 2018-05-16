@@ -3,6 +3,7 @@ import Parser
 import qualified Dictionary
 import Expr
 import Statement
+import TestProgram
 
 import Test.Tasty
 import Test.Tasty.HUnit
@@ -82,10 +83,22 @@ statementTest = testGroup "statement test"
       @?= Begin [Read "n", Assignment "fac" (Num 1), While (Var "n") (Begin [Assignment "fac" (Mul (Var "fac") (Var "n")), Assignment "n" (Sub (Var "n") (Num 1))]), Write (Var "fac")]
   ]
 
+programTest = testGroup "program test"
+  [ testCase "p" $ toString p @?= ""
+  , testCase "p1" $ toString p1 @?= ""
+  , testCase "p2" $ toString p2 @?= ""
+  , testCase "p3" $ toString p3 @?= ""
+  , testCase "p4" $ toString p4 @?= ""
+  , testCase "rp" $ rp @?= [3, 6, 9, 12, 15]
+  , testCase "rp1" $ rp1 @?= [64, 16, 27, 8, 8, 4, 1, 2, 0]
+  , testCase "rp4" $ rp4 @?= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10000000000]
+  ]
+
 allTests = testGroup "all tests"
   [ parserTests
   , exprTest
   , statementTest
+  , programTest
   ]
 
 main :: IO ()
