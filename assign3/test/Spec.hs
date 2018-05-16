@@ -2,6 +2,7 @@ import Prelude hiding (return, fail)
 import Parser
 import qualified Dictionary
 import Expr
+import Statement
 
 import Test.Tasty
 import Test.Tasty.HUnit
@@ -50,7 +51,10 @@ exprTest = testGroup "exprTest"
     , testCase "x" $ testValue "x"  @?= x
     , testCase "x+y" $ testValue "x+y"  @?= x + y
     , testCase "x-y-y" $ testValue "x-y-y"  @?= x - y -y
+    -- , testCase "1/(2-y)" $ testValue "1/(2-y)" @?= Exception: division by 0
+    -- , testCase "2+z" $ testValue "2+z" @?= Exception: undefined variable z
     ]
+
 allTests = testGroup "all tests"
     [ parserTests
     , exprTest
