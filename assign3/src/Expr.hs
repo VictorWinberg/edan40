@@ -1,4 +1,4 @@
-module Expr(Expr, T, parse, fromString, value, toString) where
+module Expr(Expr(..), T, parse, fromString, value, toString) where
 
 {-
    An expression of type Expr is a representation of an arithmetic expression
@@ -30,7 +30,7 @@ import qualified Dictionary
 
 data Expr = Num Integer | Var String | Add Expr Expr
        | Sub Expr Expr | Mul Expr Expr | Div Expr Expr
-         deriving Show
+         deriving (Eq, Show)
 
 type T = Expr
 

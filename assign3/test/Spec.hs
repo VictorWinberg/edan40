@@ -55,9 +55,35 @@ exprTest = testGroup "exprTest"
     -- , testCase "2+z" $ testValue "2+z" @?= Exception: undefined variable z
     ]
 
+whileString = "while n do begin fac:=fac*n; n:=n-1; end"
+
+statementTest = testGroup "statementTest"
+  [ testCase "skip" $ fromString "skip;" @?= Skip
+  , testCase "read" $ fromString "read count;" @?= Read "count"
+  , testCase "write" $ fromString "write count+1;"
+      @?= Write (Add (Var "count") (Num 1))
+  , testCase "count" $ fromString "count := 0;"
+      @?= Assignment "count" (Num 0)
+  , testCase "begin" $ fromString "begin skip; end"
+      @?= Skip
+  , testCase "begin" $ fromString "begin x:=0; x:=x+1; end"
+      @?= Skip
+  , testCase "if" $ fromString "if x then skip; else x:=0-x;"
+      @?= If (Var "x") Skip (Assignment "x" (Sub (Num 0) (Var "x")))
+  , testCase "while" $ fromString "while n do n:=n-1;"
+      @?= While (Var "n") (Assignment "n" (Sub (Var "n") (Num 1)))
+  , testCase "while" $ fromString whileString
+      @?= Skip
+  , testCase "begin" $ fromString  "begin read x ; x := x + 1 ; write x; end"
+      @?= Skip
+  , testCase "begin" $ fromString  ("begin read n; fac:=1; " ++ whileString ++ " write fac; end")
+      @?= Skip
+  ]
+
 allTests = testGroup "all tests"
     [ parserTests
     , exprTest
+    , statementTest
     ]
 
 main :: IO ()
