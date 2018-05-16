@@ -25,6 +25,7 @@ charsTest = testGroup "chars test"
 
 requireTest = testGroup "require test"
     [ testCase "require ok" $ require ":=" ":= 1" @?= Just (":=","1")
+    -- , testCase "require error" $ require "else" "then" @?= Exception: expecting else near then
     ]
 
 acceptTest = testCase "accept test" $ (accept "read" -# word) "read count" @?= Just ("count","")

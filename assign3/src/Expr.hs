@@ -24,6 +24,7 @@ module Expr(Expr, T, parse, fromString, value, toString) where
    Dictionary.T Int.
 -}
 import Prelude hiding (return, fail)
+import Data.Maybe
 import Parser hiding (T)
 import qualified Dictionary
 
@@ -77,7 +78,14 @@ safeDiv n m = if m == 0 then
                 Just(n/m)
 
 value :: Expr -> Dictionary.T String Integer -> Integer
-value (Num n) _ = error "value not implemented"
+value (Num n) dict = n
+value (Var v) dict
+  | Just val <- Dictionary.lookup v dict = val
+  | otherwise = error $ "undefined variable " ++ v
+value (Add t u) dict = undefined
+value (Sub t u) dict = undefined
+value (Mul t u) dict = undefined
+value (Div t u) dict = undefined
 
 instance Parse Expr where
     parse = expr
