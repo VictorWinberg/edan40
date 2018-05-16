@@ -23,7 +23,7 @@ m -# n = error "-# not implemented"
 m #- n = error "#- not implemented"
 
 spaces :: Parser String
-spaces =  return ? isSpace
+spaces = iter $ char ? isSpace
 
 token :: Parser a -> Parser a
 token m = m #- spaces
