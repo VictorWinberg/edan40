@@ -34,9 +34,17 @@ buildSkip _ = Skip
 
 exec :: [T] -> Dictionary.T String Integer -> [Integer] -> [Integer]
 exec [] _ = const []
-exec (If e s1 s2: stmts) dict
-  | Expr.value e dict > 0 = exec (s1: stmts) dict
-  | otherwise             = exec (s2: stmts) dict
+exec (Assignment v e : stmts) dict = exec stmts $ Dictionary.insert (v, Expr.value e dict) dict
+exec (If e s1 s2 : stmts) dict
+  | Expr.value e dict > 0 = exec (s1 : stmts) dict
+  | otherwise             = exec (s2 : stmts) dict
+exec (Begin ss : stmts) dict = exec (ss ++ stmts) dict
+exec (While e s : stmts) dict
+  | Expr.value e dict > 0 = exec (s : While e s : stmts) dict
+  | otherwise             = exec stmts dict
+exec (Read v : stmts) dict = undefined
+exec (Write e : stmts) dict = undefined
+exec (Skip : stmts) dict = exec stmts dict
 
 
 instance Parse Statement where
