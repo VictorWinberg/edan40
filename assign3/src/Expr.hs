@@ -71,12 +71,6 @@ shw prec (Sub t u) = parens (prec>5) (shw 5 t ++ "-" ++ shw 6 u)
 shw prec (Mul t u) = parens (prec>6) (shw 6 t ++ "*" ++ shw 6 u)
 shw prec (Div t u) = parens (prec>6) (shw 6 t ++ "/" ++ shw 7 u)
 
-safeDiv :: Int -> Int -> maybe Int
-safeDiv n m = if m == 0 then
-                Nothing
-              else
-                Just(n/m)
-
 value :: Expr -> Dictionary.T String Integer -> Integer
 value (Num n) dict = n
 value (Var v) dict
