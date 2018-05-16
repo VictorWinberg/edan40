@@ -33,10 +33,10 @@ skip = accept "skip" #- require ";" >-> buildSkip
 buildSkip _ = Skip
 
 exec :: [T] -> Dictionary.T String Integer -> [Integer] -> [Integer]
-exec (If cond thenStmts elseStmts: stmts) dict input =
-    if (Expr.value cond dict)>0
-    then exec (thenStmts: stmts) dict input
-    else exec (elseStmts: stmts) dict input
+exec [] _ = const []
+exec (If e s1 s2: stmts) dict
+  | Expr.value e dict > 0 = exec (s1: stmts) dict
+  | otherwise             = exec (s2: stmts) dict
 
 
 instance Parse Statement where
