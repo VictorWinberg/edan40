@@ -23,6 +23,16 @@ buildIfElse ((e, s1), s2) = If e s1 s2
 while = accept "while" -# Expr.parse #- require "do" # parse >-> buildWhile
 buildWhile (e, s) = While e s
 
+write = accept "write" -# Expr.parse #- require ";" >-> buildWrite
+buildWrite (e) = Write e
+
+read2 = accept "read" -# word #- require ";" >-> buildRead
+buildRead (s) = Read s
+
+skip = accept "skip" #- require ";" >-> buildSkip
+buildSkip (_) = Skip
+
+
 exec :: [T] -> Dictionary.T String Integer -> [Integer] -> [Integer]
 exec (If cond thenStmts elseStmts: stmts) dict input =
     if (Expr.value cond dict)>0
@@ -31,5 +41,5 @@ exec (If cond thenStmts elseStmts: stmts) dict input =
 
 
 instance Parse Statement where
-  parse = assignment ! ifElse ! while
+  parse = assignment ! ifElse ! while ! write ! read2 ! skip
   toString = error "Statement.toString not implemented"
