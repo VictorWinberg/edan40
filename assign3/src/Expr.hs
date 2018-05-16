@@ -85,7 +85,9 @@ value (Var v) dict
 value (Add t u) dict = value t dict + value u dict
 value (Sub t u) dict = value t dict - value u dict
 value (Mul t u) dict = value t dict * value u dict
-value (Div t u) dict = undefined
+value (Div t u) dict
+  | value u dict == 0 = error $ "division by 0"
+  | otherwise = value t dict `div` value u dict
 
 instance Parse Expr where
     parse = expr
