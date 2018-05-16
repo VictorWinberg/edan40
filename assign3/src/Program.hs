@@ -5,7 +5,7 @@ import qualified Dictionary
 import Prelude hiding (return, fail)
 newtype T = Program [Statement.T]
 instance Parse T where
-  parse = error "Program.parse not implemented"
-  toString = error "Program.toString not implemented"
+  parse = iter Statement.parse >-> Program
+  toString (Program p) = concatMap Statement.toString p
 
 exec (Program p) = Statement.exec p Dictionary.empty
