@@ -58,26 +58,28 @@ exprTest = testGroup "exprTest"
 whileString = "while n do begin fac:=fac*n; n:=n-1; end"
 
 statementTest = testGroup "statementTest"
-  [ testCase "skip" $ fromString "skip;" @?= Skip
-  , testCase "read" $ fromString "read count;" @?= Read "count"
+  [ testCase "skip" $ fromString "skip;"
+      @?= Skip
+  , testCase "read" $ fromString "read count;"
+      @?= Read "count"
   , testCase "write" $ fromString "write count+1;"
       @?= Write (Add (Var "count") (Num 1))
   , testCase "count" $ fromString "count := 0;"
       @?= Assignment "count" (Num 0)
   , testCase "begin" $ fromString "begin skip; end"
-      @?= Skip
+      @?= Begin [Skip]
   , testCase "begin" $ fromString "begin x:=0; x:=x+1; end"
-      @?= Skip
+      @?= Begin [Assignment "x" (Num 0), Assignment "x" (Add (Var "x") (Num 1))]
   , testCase "if" $ fromString "if x then skip; else x:=0-x;"
       @?= If (Var "x") Skip (Assignment "x" (Sub (Num 0) (Var "x")))
   , testCase "while" $ fromString "while n do n:=n-1;"
       @?= While (Var "n") (Assignment "n" (Sub (Var "n") (Num 1)))
   , testCase "while" $ fromString whileString
-      @?= Skip
+      @?= While (Var "n") (Begin [Assignment "fac" (Mul (Var "fac") (Var "n")), Assignment "n" (Sub (Var "n") (Num 1))])
   , testCase "begin" $ fromString  "begin read x ; x := x + 1 ; write x; end"
-      @?= Skip
+      @?= Begin [Read "x", Assignment "x" (Add (Var "x") (Num 1)), Write (Var "x")]
   , testCase "begin" $ fromString  ("begin read n; fac:=1; " ++ whileString ++ " write fac; end")
-      @?= Skip
+      @?= Begin [Read "n", Assignment "fac" (Num 1), While (Var "n") (Begin [Assignment "fac" (Mul (Var "fac") (Var "n")), Assignment "n" (Sub (Var "n") (Num 1))]), Write (Var "fac")]
   ]
 
 allTests = testGroup "all tests"

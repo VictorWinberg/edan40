@@ -25,14 +25,12 @@ begin = accept "begin" -# iter parse #- require "end" >-> Begin
 while = accept "while" -# Expr.parse #- require "do" # parse >-> buildWhile
 buildWhile (e, s) = While e s
 
-write = accept "write" -# Expr.parse #- require ";" >-> buildWrite
-buildWrite (e) = Write e
+read' = accept "read" -# word #- require ";" >-> Read
 
-read2 = accept "read" -# word #- require ";" >-> buildRead
-buildRead (s) = Read s
+write = accept "write" -# Expr.parse #- require ";" >-> Write
 
 skip = accept "skip" #- require ";" >-> buildSkip
-buildSkip (_) = Skip
+buildSkip _ = Skip
 
 exec :: [T] -> Dictionary.T String Integer -> [Integer] -> [Integer]
 exec (If cond thenStmts elseStmts: stmts) dict input =
@@ -42,5 +40,5 @@ exec (If cond thenStmts elseStmts: stmts) dict input =
 
 
 instance Parse Statement where
-  parse = assignment ! ifElse ! while ! write ! read2 ! skip
+  parse = assignment ! ifElse ! begin ! while ! read' ! write ! skip
   toString = error "Statement.toString not implemented"
