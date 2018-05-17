@@ -29,7 +29,7 @@ import Parser hiding (T)
 import qualified Dictionary
 
 data Expr = Num Integer | Var String | Add Expr Expr
-       | Sub Expr Expr | Mul Expr Expr | Div Expr Expr
+       | Sub Expr Expr | Mul Expr Expr | Div Expr Expr | Pow Expr Expr
          deriving (Eq, Show)
 
 type T = Expr
@@ -43,7 +43,8 @@ var = word >-> Var
 num = number >-> Num
 
 mulOp = lit '*' >-> (\_ -> Mul) !
-        lit '/' >-> (\_ -> Div)
+        lit '/' >-> (\_ -> Div) !
+        lit '^' >-> (\_ -> Pow)
 
 addOp = lit '+' >-> (\_ -> Add) !
         lit '-' >-> (\_ -> Sub)
@@ -70,6 +71,7 @@ shw prec (Add t u) = parens (prec>5) (shw 5 t ++ "+" ++ shw 5 u)
 shw prec (Sub t u) = parens (prec>5) (shw 5 t ++ "-" ++ shw 6 u)
 shw prec (Mul t u) = parens (prec>6) (shw 6 t ++ "*" ++ shw 6 u)
 shw prec (Div t u) = parens (prec>6) (shw 6 t ++ "/" ++ shw 7 u)
+shw prec (Pow t u) = parens (prec>7) (shw 7 t ++ "^" ++ shw 8 u)
 
 value :: Expr -> Dictionary.T String Integer -> Integer
 value (Num n) dict = n
@@ -82,6 +84,7 @@ value (Mul t u) dict = value t dict * value u dict
 value (Div t u) dict
   | value u dict == 0 = error $ "Expr.value: division by 0"
   | otherwise = value t dict `div` value u dict
+value (Pow t u) dict = value t dict ^ value u dict
 
 instance Parse Expr where
     parse = expr
