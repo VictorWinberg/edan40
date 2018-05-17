@@ -51,17 +51,9 @@ s1 = "\
 \  end\
 \write s;"
 
-sp = putStr (toString p)
-
-sp1 = putStr (toString p1)
-
 p2 = fromString (toString p)
 
 p3 = fromString (toString p1)
-
-rp = Program.exec p [3,16]
-
-rp1 = Program.exec p1 [1024, 2]
 
 s4 = "\
 \read a;\
@@ -80,4 +72,12 @@ s4 = "\
 
 p4 = fromString s4
 
+rp = Program.exec p [3,16]
+
+rp1 = Program.exec p1 [1024, 2]
+
 rp4 = Program.exec p4 [4,4]
+
+sp = putStr (toString p)
+
+sp1 = putStr (toString p1)

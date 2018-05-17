@@ -3,6 +3,7 @@ import Parser
 import qualified Dictionary
 import Expr
 import Statement
+import Program
 import TestProgram
 
 import Test.Tasty
@@ -89,9 +90,9 @@ programTest = testGroup "program test"
   , testCase "p2" $ toString p2 @?= ""
   , testCase "p3" $ toString p3 @?= ""
   , testCase "p4" $ toString p4 @?= ""
-  , testCase "rp" $ rp @?= [3, 6, 9, 12, 15]
-  , testCase "rp1" $ rp1 @?= [64, 16, 27, 8, 8, 4, 1, 2, 0]
-  , testCase "rp4" $ rp4 @?= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10000000000]
+  , testCase "rp" $ Program.exec p [3,16] @?= [3, 6, 9, 12, 15]
+  , testCase "rp1" $ Program.exec p1 [1024, 2] @?= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10000000000]
+  , testCase "rp4" $ Program.exec p4 [4,4] @?= [64, 16, 27, 8, 8, 4, 1, 2, 0]
   ]
 
 allTests = testGroup "all tests"
