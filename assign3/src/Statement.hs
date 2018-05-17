@@ -11,7 +11,8 @@ data Statement =
   While Expr.T Statement |
   Read String |
   Write Expr.T |
-  Skip
+  Skip |
+  Comment String
   deriving (Eq, Show)
 
 assignment = word #- accept ":=" # Expr.parse #- require ";" >-> buildAss
@@ -32,6 +33,8 @@ write = accept "write" -# Expr.parse #- require ";" >-> Write
 skip = accept "skip" #- require ";" >-> buildSkip
 buildSkip _ = Skip
 
+comment = accept "--" -# iter (char ? (/= '\n')) #- require "\n" >-> Comment
+
 exec :: [T] -> Dictionary.T String Integer -> [Integer] -> [Integer]
 exec [] _ = const []
 exec (Assignment v e : stmts) dict = exec stmts $ Dictionary.insert (v, Expr.value e dict) dict
@@ -48,5 +51,5 @@ exec (Skip : stmts) dict = exec stmts dict
 
 
 instance Parse Statement where
-  parse = assignment ! ifElse ! begin ! while ! read' ! write ! skip
+  parse = assignment ! ifElse ! begin ! while ! read' ! write ! skip ! comment
   toString = error "Statement.toString not implemented"
