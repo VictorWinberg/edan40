@@ -84,12 +84,57 @@ statementTest = testGroup "statement test"
       @?= Begin [Read "n", Assignment "fac" (Num 1), While (Var "n") (Begin [Assignment "fac" (Mul (Var "fac") (Var "n")), Assignment "n" (Sub (Var "n") (Num 1))]), Write (Var "fac")]
   ]
 
+p' = "\
+\read k;\
+\read n;\
+\m := 1;\
+\while n-m do\
+\  begin\
+\    if m - m/k*k then\
+\      skip;\
+\    else\
+\      write m;\
+\    m := m + 1;\
+\  end"
+
+p1' = "\
+\read n;\
+\read b;\
+\m := 1;\
+\s := 0;\
+\p := 1;\
+\while n do\
+\  begin\
+\    q := n/b;\
+\    r := n - q*b;\
+\    write r;\
+\    s := p*r+s;\
+\    p := p*10;\
+\    n :=q;\
+\  end\
+\write s;"
+
+p4' = "\
+\read a;\
+\read b;\
+\-- a comment\n\
+\s := 3;\
+\while a do\
+\  begin\
+\    c := a^s;\
+\    d := 2^a;\
+\    write c;\
+\    write d;\
+\    a := a-1;\
+\  end\
+\write a;"
+
 programTest = testGroup "program test"
-  [ testCase "p" $ toString p @?= ""
-  , testCase "p1" $ toString p1 @?= ""
-  , testCase "p2" $ toString p2 @?= ""
-  , testCase "p3" $ toString p3 @?= ""
-  , testCase "p4" $ toString p4 @?= ""
+  [ testCase "p" $ toString p @?= p'
+  , testCase "p1" $ toString p1 @?= p1'
+  , testCase "p2" $ toString p2 @?= p'
+  , testCase "p3" $ toString p3 @?= p1'
+  , testCase "p4" $ toString p4 @?= p4'
   , testCase "rp" $ Program.exec p [3,16] @?= [3, 6, 9, 12, 15]
   , testCase "rp1" $ Program.exec p1 [1024, 2] @?= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 10000000000]
   , testCase "rp4" $ Program.exec p4 [4,4] @?= [64, 16, 27, 8, 8, 4, 1, 2, 0]
