@@ -85,49 +85,49 @@ statementTest = testGroup "statement test"
   ]
 
 p' = "\
-\read k;\
-\read n;\
-\m := 1;\
-\while n-m do\
-\  begin\
-\    if m - m/k*k then\
-\      skip;\
-\    else\
-\      write m;\
-\    m := m + 1;\
-\  end"
+\read k;\n\
+\read n;\n\
+\m := 1;\n\
+\while n-m do\n\
+\  begin\n\
+\    if m-m/k*k then\n\
+\      skip;\n\
+\    else\n\
+\      write m;\n\
+\    m := m+1;\n\
+\  end\n"
 
 p1' = "\
-\read n;\
-\read b;\
-\m := 1;\
-\s := 0;\
-\p := 1;\
-\while n do\
-\  begin\
-\    q := n/b;\
-\    r := n - q*b;\
-\    write r;\
-\    s := p*r+s;\
-\    p := p*10;\
-\    n :=q;\
-\  end\
-\write s;"
+\read n;\n\
+\read b;\n\
+\m := 1;\n\
+\s := 0;\n\
+\p := 1;\n\
+\while n do\n\
+\  begin\n\
+\    q := n/b;\n\
+\    r := n-q*b;\n\
+\    write r;\n\
+\    s := p*r+s;\n\
+\    p := p*10;\n\
+\    n :=q;\n\
+\  end\n\
+\write s;\n"
 
 p4' = "\
-\read a;\
-\read b;\
+\read a;\n\
+\read b;\n\
 \-- a comment\n\
-\s := 3;\
-\while a do\
-\  begin\
-\    c := a^s;\
-\    d := 2^a;\
-\    write c;\
-\    write d;\
-\    a := a-1;\
-\  end\
-\write a;"
+\s := 3;\n\
+\while a do\n\
+\  begin\n\
+\    c := a^s;\n\
+\    d := 2^a;\n\
+\    write c;\n\
+\    write d;\n\
+\    a := a-1;\n\
+\  end\n\
+\write a;\n"
 
 programTest = testGroup "program test"
   [ testCase "p" $ toString p @?= p'

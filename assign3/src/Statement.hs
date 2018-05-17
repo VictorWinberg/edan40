@@ -51,9 +51,9 @@ exec (Skip : stmts) dict ints = exec stmts dict ints
 
 shw :: T -> String
 shw (Assignment v e) = v ++ " := " ++ toString e ++ ";" ++ "\n"
-shw (If e s1 s2) = "if " ++ toString e ++ " then " ++ shw s1 ++ " else " ++ shw s2 ++ "\n"
-shw (Begin ss) = "begin" ++ concatMap shw ss ++ "end" ++ "\n"
-shw (While e s) = "while" ++ toString e ++ "do" ++ shw s ++ "\n"
+shw (If e s1 s2) = "if " ++ toString e ++ " then\n" ++ shw s1 ++ " else\n" ++ shw s2 ++ "\n"
+shw (Begin ss) = "begin\n" ++ concatMap shw ss ++ "end" ++ "\n"
+shw (While e s) = "while " ++ toString e ++ " do\n" ++ shw s ++ "\n"
 shw (Read v) = "read " ++ v ++ ";" ++ "\n"
 shw (Write e) = "write " ++ toString e ++ ";" ++ "\n"
 shw (Skip) = "skip" ++ ";" ++ "\n"
