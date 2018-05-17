@@ -55,6 +55,7 @@ exprTest = testGroup "exprTest"
   , testCase "x-y-y" $ testValue "x-y-y"  @?= x - y -y
   -- , testCase "1/(2-y)" $ testValue "1/(2-y)" @?= Exception: division by 0
   -- , testCase "2+z" $ testValue "2+z" @?= Exception: undefined variable z
+  , testCase "x^y" $ testValue "x^y" @?= x ^ y
   ]
 
 whileString = "while n do begin fac:=fac*n; n:=n-1; end"
