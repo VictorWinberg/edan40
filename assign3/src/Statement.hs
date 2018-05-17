@@ -33,18 +33,18 @@ skip = accept "skip" #- require ";" >-> buildSkip
 buildSkip _ = Skip
 
 exec :: [T] -> Dictionary.T String Integer -> [Integer] -> [Integer]
-exec [] _ = const []
-exec (Assignment v e : stmts) dict = exec stmts $ Dictionary.insert (v, Expr.value e dict) dict
-exec (If e s1 s2 : stmts) dict
-  | Expr.value e dict > 0 = exec (s1 : stmts) dict
-  | otherwise             = exec (s2 : stmts) dict
-exec (Begin ss : stmts) dict = exec (ss ++ stmts) dict
-exec (While e s : stmts) dict
-  | Expr.value e dict > 0 = exec (s : While e s : stmts) dict
-  | otherwise             = exec stmts dict
-exec (Read v : stmts) dict = undefined
-exec (Write e : stmts) dict = undefined
-exec (Skip : stmts) dict = exec stmts dict
+exec [] _ _ = []
+exec (Assignment v e : stmts) dict ints = exec stmts (Dictionary.insert (v, Expr.value e dict) dict) ints
+exec (If e s1 s2 : stmts) dict ints
+  | Expr.value e dict > 0 = exec (s1 : stmts) dict ints
+  | otherwise             = exec (s2 : stmts) dict ints
+exec (Begin ss : stmts) dict ints = exec (ss ++ stmts) dict ints
+exec (While e s : stmts) dict ints
+  | Expr.value e dict > 0 = exec (s : While e s : stmts) dict ints
+  | otherwise             = exec stmts dict ints
+exec (Read v : stmts) dict (int : ints) = exec stmts (Dictionary.insert(v, int) dict) ints
+exec (Write e : stmts) dict ints = Expr.value e dict : exec stmts dict ints
+exec (Skip : stmts) dict ints = exec stmts dict ints
 
 
 instance Parse Statement where
