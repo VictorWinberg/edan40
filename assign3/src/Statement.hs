@@ -48,6 +48,7 @@ exec (While e s : stmts) dict ints
 exec (Read v : stmts) dict (int : ints) = exec stmts (Dictionary.insert(v, int) dict) ints
 exec (Write e : stmts) dict ints = Expr.value e dict : exec stmts dict ints
 exec (Skip : stmts) dict ints = exec stmts dict ints
+exec (Comment v : stmts) dict ints = exec stmts dict ints
 
 indent n = (replicate (2*n) ' ')
 
