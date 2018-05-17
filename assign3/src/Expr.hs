@@ -34,34 +34,34 @@ data Expr = Num Integer | Var String | Add Expr Expr
 
 type T = Expr
 
-var, num, tal, factor, term, expr :: Parser Expr
+var, num, factor, pow, term, expr :: Parser Expr
 
-term', expr', factor' :: Expr -> Parser Expr
+expr', term', pow' :: Expr -> Parser Expr
 
 var = word >-> Var
 
 num = number >-> Num
 
+powOp = lit '^' >-> (\_ -> Pow)
+
 mulOp = lit '*' >-> (\_ -> Mul) !
         lit '/' >-> (\_ -> Div)
-
-powOp = lit '^' >-> (\_ -> Pow)
 
 addOp = lit '+' >-> (\_ -> Add) !
         lit '-' >-> (\_ -> Sub)
 
 bldOp e (oper,e') = oper e e'
 
-tal = num !
+factor = num !
          var !
          lit '(' -# expr #- lit ')' !
          err "illegal factor"
 
-factor' e = powOp # tal >-> bldOp e #> factor' ! return e
-factor = tal #> factor'
+pow' e = powOp # factor >-> bldOp e #> pow' ! return e
+pow = factor #> pow'
 
-term' e = mulOp # factor >-> bldOp e #> term' ! return e
-term = factor #> term'
+term' e = mulOp # pow >-> bldOp e #> term' ! return e
+term = pow #> term'
 
 expr' e = addOp # term >-> bldOp e #> expr' ! return e
 expr = term #> expr'
