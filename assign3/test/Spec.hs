@@ -110,7 +110,7 @@ p1' = "\
 \    write r;\n\
 \    s := p*r+s;\n\
 \    p := p*10;\n\
-\    n :=q;\n\
+\    n := q;\n\
 \  end\n\
 \write s;\n"
 

@@ -49,16 +49,18 @@ exec (Read v : stmts) dict (int : ints) = exec stmts (Dictionary.insert(v, int) 
 exec (Write e : stmts) dict ints = Expr.value e dict : exec stmts dict ints
 exec (Skip : stmts) dict ints = exec stmts dict ints
 
-shw :: T -> String
-shw (Assignment v e) = v ++ " := " ++ toString e ++ ";" ++ "\n"
-shw (If e s1 s2) = "if " ++ toString e ++ " then\n" ++ shw s1 ++ " else\n" ++ shw s2 ++ "\n"
-shw (Begin ss) = "begin\n" ++ concatMap shw ss ++ "end" ++ "\n"
-shw (While e s) = "while " ++ toString e ++ " do\n" ++ shw s ++ "\n"
-shw (Read v) = "read " ++ v ++ ";" ++ "\n"
-shw (Write e) = "write " ++ toString e ++ ";" ++ "\n"
-shw (Skip) = "skip" ++ ";" ++ "\n"
-shw (Comment v) = "-- " ++ v ++ "\n"
+indent n = (replicate (2*n) ' ')
+
+shw :: Int -> T -> String
+shw n (Assignment v e) = indent n ++ v ++ " := " ++ toString e ++ ";" ++ "\n"
+shw n (If e s1 s2) = indent n ++ "if " ++ toString e ++ " then\n" ++ shw (n+1) s1 ++ indent n ++ "else\n" ++ shw (n+1) s2
+shw n (Begin ss) = indent n ++ "begin\n" ++ concatMap (shw (n+1)) ss ++ indent n ++ "end"
+shw n (While e s) = indent n ++ "while " ++ toString e ++ " do\n" ++ shw (n+1) s ++ "\n"
+shw n (Read v) = indent n ++ "read " ++ v ++ ";" ++ "\n"
+shw n (Write e) = indent n ++ "write " ++ toString e ++ ";" ++ "\n"
+shw n (Skip) = indent n ++ "skip" ++ ";" ++ "\n"
+shw n (Comment v) = indent n ++ "-- " ++ v ++ "\n"
 
 instance Parse Statement where
   parse = assignment ! ifElse ! begin ! while ! read' ! write ! skip ! comment
-  toString = shw
+  toString = shw 0
