@@ -49,7 +49,16 @@ exec (Read v : stmts) dict (int : ints) = exec stmts (Dictionary.insert(v, int) 
 exec (Write e : stmts) dict ints = Expr.value e dict : exec stmts dict ints
 exec (Skip : stmts) dict ints = exec stmts dict ints
 
+shw :: T -> String
+shw (Assignment v e) = v ++ " := " ++ toString e ++ ";" ++ "\n"
+shw (If e s1 s2) = "if " ++ toString e ++ " then\n" ++ shw s1 ++ " else\n" ++ shw s2 ++ "\n"
+shw (Begin ss) = "begin\n" ++ concatMap shw ss ++ "end" ++ "\n"
+shw (While e s) = "while " ++ toString e ++ " do\n" ++ shw s ++ "\n"
+shw (Read v) = "read " ++ v ++ ";" ++ "\n"
+shw (Write e) = "write " ++ toString e ++ ";" ++ "\n"
+shw (Skip) = "skip" ++ ";" ++ "\n"
+shw (Comment v) = "-- " ++ v ++ "\n"
 
 instance Parse Statement where
   parse = assignment ! ifElse ! begin ! while ! read' ! write ! skip ! comment
-  toString = error "Statement.toString not implemented"
+  toString = shw
